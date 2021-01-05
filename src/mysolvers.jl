@@ -200,7 +200,8 @@ end
 	dp5!(m, f, u0, tspan, dt, p)
 	
 Explicit Dormand-Prince method. Fixed dt.
-Non-allocating.
+Non-allocating for the solves.
+Allocates the intermediate `f` calls though.
 """
 function dp5!(m, f, u0, tspan, dt, p)
     cache = dp5_cache() # allocates, inefficient
@@ -216,6 +217,33 @@ function dp5!(m, f, u0, tspan, dt, p)
         for j in 2:S # calculate K vals
             tmp = sum([a[j][k] * K[:, k] for k in 1:j - 1]) 
             K[:, j] = f(u + dt * tmp, p, t + dt * c[j])
+        end
+        m[:, i] = m[:, i - 1] + dt * sum([b[k] .* K[:, k] for k in 1:S])
+    end
+    m
+end
+
+"""
+	dp5_inplace!(m, f!, u0, tspan, dt, p)
+	
+Explicit Dormand-Prince method. Fixed dt.
+
+"""
+function dp5_inplace!(m, f!, u0, tspan, dt, p; cache=dp5_cache())
+    # cache = dp5_cache() # allocates, inefficient
+    a, b, c = cache.a, cache.b, cache.c
+    S = length(c) # number of stages
+    N = length(u0)
+    m[:, 1] = u0
+    K = Matrix{eltype(u0)}(undef, N, S) 
+    for i in 2:size(m, 2)
+        u = m[:, i - 1]
+        t = (i - 1) * dt + tspan[1]
+        # K[:, 1] = f(u, p, t)
+        f!(K[:, 1], u, p, t)
+        for j in 2:S # calculate K vals
+            tmp = sum([a[j][k] * K[:, k] for k in 1:j - 1]) 
+            f!(K[:, j], u + dt * tmp, p, t + dt * c[j])
         end
         m[:, i] = m[:, i - 1] + dt * sum([b[k] .* K[:, k] for k in 1:S])
     end

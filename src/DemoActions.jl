@@ -17,7 +17,15 @@ include("fwd.jl")
 export mysolve, mysolve_inplace
 
 # solver algorithms
-export eulers_inplace_f!, midpoint!, midpoint_inplace_f!, rk4!, rk4_inplace_f!, rk4_inplace_f_prealloc_k!, dp5, dp5!
+export eulers_inplace_f!, 
+    midpoint!, 
+    midpoint_inplace_f!, 
+    rk4!, 
+    rk4_inplace_f!, 
+    rk4_inplace_f_prealloc_k!, 
+    dp5, 
+    dp5!, 
+    dp5_inplace!
 
 # mini model-zoo
 export lotka!, transcriptional_component!, bistable_gene_circuit!, negative_autoregulation!, phosphorylation_cycle!
