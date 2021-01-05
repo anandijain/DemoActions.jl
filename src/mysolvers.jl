@@ -1,3 +1,34 @@
+
+"""
+This struct is passed to `mysolve`.
+
+fields:
+* alg
+* f!
+* u0
+* tspan
+* dt
+* p
+"""
+struct MyProbInplace
+    alg!
+    f!
+    u0
+    tspan
+    dt
+    p
+end
+
+
+"""
+	mysolve_inplace(prob::MyProbInplace)
+"""
+function mysolve_inplace(prob::MyProbInplace)
+    m = Matrix{eltype(prob.u0)}(undef, length(prob.u0), Int((prob.tspan[2] - prob.tspan[1]) / prob.dt))
+    prob.alg!(m, prob.f!, prob.u0, prob.tspan, prob.dt, prob.p)
+end
+
+
 """
 	mysolve(alg, f, u0, tspan, dt; p=nothing)
 

@@ -14,7 +14,7 @@ include("models.jl")
 include("fwd.jl")
 
 # solver interfaces
-export mysolve, mysolve_inplace
+export MyProbInplace, mysolve, mysolve_inplace
 
 # solver algorithms
 export eulers_inplace_f!, 

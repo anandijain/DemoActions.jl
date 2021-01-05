@@ -33,10 +33,12 @@ end
     dt = 0.25
 
     for alg in test_algs 
-        @testset "$(alg)" begin
+        @testset "$(alg)_inplace" begin
             for f in test_models 
                 @testset "$f" begin
-                    @test !isnothing(mysolve_inplace(alg, f, u0, tspan, dt; p=p))
+                    @time sol = mysolve_inplace(alg, f, u0, tspan, dt; p=p)
+                    @show sol
+                    @test !isnothing(sol)
                 end 
             end
         end
