@@ -3,6 +3,9 @@ uuid = "c40a6267-3035-476d-8d3f-55e563cf4637"
 authors = ["anand <anandj@uchicago.edu> and contributors"]
 version = "0.1.0"
 
+[deps]
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
 [compat]
 julia = "1"
 
